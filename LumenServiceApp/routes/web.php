@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Public\PostController;
+
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 /*
@@ -72,3 +74,9 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
     $router->post('/register', 'AuthController@register');
     $router->post('/login', 'AuthController@login');
 });
+
+$router->get('public/post', 'PublicController\PostController@index');
+$router->get('public/post/{id}', 'PublicController\PostController@show');
+// $router->post('public/post', 'public/PostController@store');
+// $router->put('public/post/{id}', 'public/PostController@update');
+// $router->delete('public/post/{id}', 'public/PostController@destroy');

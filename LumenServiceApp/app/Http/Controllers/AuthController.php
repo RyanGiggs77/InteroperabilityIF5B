@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Post;
 
 class AuthController extends Controller
 {
@@ -26,7 +27,8 @@ class AuthController extends Controller
         $validationRules = [
             'name' => 'required|string',
             'email' => 'required|email|unique:users|string',
-            'password' => 'required|confirmed'
+            'password' => 'required|confirmed',
+            'role' => 'required|string'
         ];
 
         $validator = Validator::make($input, $validationRules);
@@ -39,6 +41,7 @@ class AuthController extends Controller
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->password = app('hash')->make($request->input('password'));
+        $user->role = $request->input('role');
         $user->save();
 
         return response()->json($user, 200);
