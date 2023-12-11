@@ -42,6 +42,21 @@ class PostController extends Controller
     return response()->json($response, 200);
     }
 
+    public function image($imageName){
+        $imagePath = storage_path('uploads/image_profile') . '/' . $imageName;
+        if (file_exists($imagePath)) {
+            $file = file_get_contents($imagePath);
+            return response($file, 200)->header('Content-Type', 'image/jpeg');
+        }
+    }
+
+    public function video($videoName){
+        $videoPath = storage_path('uploads/video_profile') . '/' . $videoName;
+        if (file_exists($videoPath)) {
+            $file = file_get_contents($videoPath);
+            return response($file, 200)->header('Content-Type', 'video/mp4');
+        }
+    }
 
 
     public function store(Request $request)
@@ -71,42 +86,75 @@ class PostController extends Controller
 
          
         if ($acceptHeader === 'application/json' || $acceptHeader === 'application/xml') {
-            $contentTypeHeader = $request->header('Content-Type');
+            // $contentTypeHeader = $request->header('Content-Type');
 
-            if ($contentTypeHeader === 'application/json') {
+            // if ($contentTypeHeader === 'application/json') {
 
                 if ($validator->fails()) {
                     return response()->json($validator->errors(), 400);
                 }
 
                 $post = Post::create($input);
-                return response()->json($post, 200);
-            }
-            else if ($contentTypeHeader === 'application/xml') {
-                $xml = new \SimpleXMLElement($request->getContent());
-                
-                if ($xml === false) {
-                    return response('Invalid XML', 400);
-                }
+
+                if ($request->hasFile('image')) {
+                    $firName = str_replace(' ', '_', $input['title']);
         
-                $post = new Post([
-                    'id' => $xml->id,
-                    'title' => $xml->title,
-                    'status' => $xml->status,
-                    'content' => $xml->content,
-                    'user_id' => $xml->user_id,
-                    'categories_id' => $xml->categories_id,
-                    'students_id' => $xml->students_id,
-                ]);
-            
-                if ($post->save()) {
-                return $xml = $post->asXml();
-                } else {
-                    return response('Gagal menyimpan data ke database', 500);
+                    $imgName = $post->id . '_' . $firName . '_' . 'image';
+                    $request->file('image')->move(storage_path('uploads/image_profile'), $imgName);
+        
+                    // Delete the previous image
+                    $current_image_path = storage_path('avatar') . '/' . $post->image;
+                    if (file_exists($current_image_path)) {
+                        unlink($current_image_path);
+                    }
+        
+                    $post->image = $imgName;
                 }
-            } else {
-                return response('Unsupported Media Type', 415);
-            }
+
+                if ($request->hasFile('video')) {
+                    $firName = str_replace(' ', '_', $input['title']);
+        
+                    $vidName = $post->id . '_' . $firName . '_' . 'video';
+                    $request->file('video')->move(storage_path('uploads/video_profile'), $vidName);
+        
+                    // Delete the previous video
+                    $current_video_path = storage_path('avatar') . '/' . $post->video;
+                    if (file_exists($current_video_path)) {
+                        unlink($current_video_path);
+                    }
+        
+                    $post->video = $vidName;
+                }
+
+                
+                return response()->json($post, 200);
+            // }
+            // else if ($contentTypeHeader === 'application/xml') {
+            //     $xml = new \SimpleXMLElement($request->getContent());
+                
+            //     if ($xml === false) {
+            //         return response('Invalid XML', 400);
+            //     }
+        
+            //     $post = new Post([
+            //         'id' => $xml->id,
+            //         'title' => $xml->title,
+            //         'status' => $xml->status,
+            //         'content' => $xml->content,
+            //         'user_id' => $xml->user_id,
+            //         'categories_id' => $xml->categories_id,
+            //         'students_id' => $xml->students_id,
+            //     ]);
+            
+            //     if ($post->save()) {
+            //     return $xml = $post->asXml();
+            //     } else {
+            //         return response('Gagal menyimpan data ke database', 500);
+            //     }
+            // } 
+            // else {
+            //     return response('Unsupported Media Type', 415);
+            // }
         } else {
             return response('Not Acceptable!', 406);
         }
@@ -189,6 +237,8 @@ class PostController extends Controller
         }
 
         $post->fill($input);
+
+        
         $post->save();
 
         return response()->json($post, 200);

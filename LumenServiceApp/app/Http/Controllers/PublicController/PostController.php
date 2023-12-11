@@ -14,7 +14,7 @@ class PostController extends Controller
     // check if current user is authorized to do this action
 
     public function index(){
-        $posts = Post::OrderBy("id", "ASC")->paginate(10)->toArray();
+        $posts = Post::with('user')->OrderBy("id","DESC")->paginate(10)->toArray();
         $response = [
             "total_count" => $posts["total"],
             "limit" => $posts["per_page"],
@@ -29,7 +29,13 @@ class PostController extends Controller
     }
 
     public function show($id){
-        $post = Post::find($id);
+        $post = Post::with(['user' => function($query){
+            $query->select('id', 'name');
+        }])->find($id);
+
+        if (!$post){
+            abort(404);
+        }
         return response()->json([
             'status' => 'success',
             'data' => $post

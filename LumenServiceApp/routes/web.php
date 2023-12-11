@@ -36,7 +36,14 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('posts/{id}', 'PostController@show');
     $router->put('posts/{id}','PostController@update');
     $router->delete('posts/{id}','PostController@destroy');
+    $router->get('posts/image/{imageName}', 'PostController@image');
+    $router->get('posts/video/{videoName}', 'PostController@video');
+
+    $router->post('profiles','ProfileController@store');
 });
+
+$router->get('/profiles/{userId}', 'ProfileController@show');
+$router->get('/profiles/image/{imageName}', 'ProfileController@image');
 
 
 // Lucture Contoller
@@ -75,8 +82,10 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
     $router->post('/login', 'AuthController@login');
 });
 
+
+// $router->group(['middleware' => 'auth'], function () use ($router) {
+    
+// });
+
 $router->get('public/post', 'PublicController\PostController@index');
 $router->get('public/post/{id}', 'PublicController\PostController@show');
-// $router->post('public/post', 'public/PostController@store');
-// $router->put('public/post/{id}', 'public/PostController@update');
-// $router->delete('public/post/{id}', 'public/PostController@destroy');

@@ -11,17 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('profiles', function (Blueprint $table) {
             $table->bigIncrements('id');
-
-            $table->string('title', 100);
-            $table->enum('status', array('draft','published'))->default('draft');
-            $table->text('content',65335);
             $table->integer('user_id')->index('user_id_foreign');
-            $table->integer('categories_id')->index('categories_id_foreign');
-            $table->integer('students_id')->index('students_id_foreign');
+            $table->string('first_name', 100);
+            $table->string('last_name', 100);
+            $table->text('summary');
             $table->string('image', 100)->nullable();
-            $table->string('video', 100)->nullable();
+            $table->timestamps();
         });
     }
 
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('posts');
+        Schema::dropIfExists('profiles');
     }
 };
