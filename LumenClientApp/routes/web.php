@@ -20,3 +20,6 @@ $router->get('/', function () use ($router) {
 $router->get('/posts/get-request-json', 'PostsController@getRequestJson');
 $router->get('/posts/get-request-xml','PostsController@getRequestXml');
 $router->get('/posts/post-request-json','PostsController@postRequestJson');
+$router->get('/posts/get-request-xml','PostsController@getRequestXml');
+$router->get('/posts/post-request-xml','PostsController@postRequestXml');
+$router->get('/posts/show-request-xml/{id}','PostsController@showRequestXml');

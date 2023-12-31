@@ -8,9 +8,10 @@
             <h1>List Post</h1>
             <table class = "table table-striped">
                 <tbody>
+                    
                     <tr>
                         <td>ID</td>
-                        echo "<td>" . $result['id'] . "</td>";
+                        <td><?php echo $result['data']['id'] ?></td>
                     </tr>
                     <tr>
                         <td>User ID</td>
