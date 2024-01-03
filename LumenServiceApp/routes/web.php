@@ -1,6 +1,13 @@
 <?php
 
 use App\Http\Controllers\Public\PostController;
+use App\Http\Controllers\Public\ProfileController;
+use App\Http\Controllers\Public\PublicController;
+use App\Http\Controllers\Public\StudentController;
+use App\Http\Controllers\Public\ProductCategoryController;
+use App\Http\Controllers\Public\HumanController;
+use App\Http\Controllers\Public\LuctureController;
+
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
@@ -30,7 +37,7 @@ $router->get('/users/{id}', 'phpServiceController@user');
 $router->get('humans','HumanController@index');
 
 // Post Contoller
-$router->group(['middleware' => 'auth'], function () use ($router) {
+// $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('posts', 'PostController@index');
     $router->post('posts','PostController@store');
     $router->get('posts/{id}', 'PostController@show');
@@ -40,7 +47,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('posts/video/{videoName}', 'PostController@video');
 
     $router->post('profiles','ProfileController@store');
-});
+// });
 
 $router->get('/profiles/{userId}', 'ProfileController@show');
 $router->get('/profiles/image/{imageName}', 'ProfileController@image');
@@ -89,3 +96,4 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
 
 $router->get('public/post', 'PublicController\PostController@index');
 $router->get('public/post/{id}', 'PublicController\PostController@show');
+$router->post('public/post','PublicController\PostController@store');
