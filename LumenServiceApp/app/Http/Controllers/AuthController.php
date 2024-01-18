@@ -9,6 +9,45 @@ use App\Models\Post;
 
 class AuthController extends Controller
 {
+/**
+ * @OA\Post(
+ *     path="/auth/register",
+ *     summary="Register a new user",
+ *     @OA\RequestBody(
+ *         @OA\MediaType(
+ *             mediaType="application/json",
+ *             @OA\Schema(
+ *                 @OA\Property(
+ *                     property="name",
+ *                     type="string"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="email",
+ *                     type="string"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="password",
+ *                     type="string"
+ *                 ),
+ *                 @OA\Property(
+ *                     property="password_confirmation",
+ *                     type="string"
+ *                 ),
+ *  *                 @OA\Property(
+ *                     property="role",
+ *                     type="admin"
+ *                 ),
+ *                 example={"name": "User Name", "email": "user@gmail.com", "password": "123456", "password_confirmation": "123456","role": "admin"}
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="OK"
+ *     )
+ * )
+ */
+
     public function index()
     {
         return view('dashboard');
